@@ -69,6 +69,16 @@ Item {
         }
     }
 
+    function seekTo(targetPosition) {
+        if (!player || !player.canSeek || length <= 0) {
+            console.warn("MPRIS: seeking is not supported by the selected player")
+            return
+        }
+
+        const target = Math.max(0, Math.min(length, targetPosition))
+        player.seek(target - position)
+    }
+
     function seekBackward() {
         if (player && player.canSeek)
             player.seek(-seekStep)
