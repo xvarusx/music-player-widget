@@ -14,12 +14,13 @@ Item {
         Text {
             text: "⏮"
             color: root.secondaryText
+            opacity: root.player && root.player.canGoPrevious ? 1 : 0.35
             font.pixelSize: 21
             anchors.verticalCenter: parent.verticalCenter
             MouseArea {
                 anchors.fill: parent
                 anchors.margins: -10
-                enabled: root.player !== null
+                enabled: root.player !== null && root.player.canGoPrevious
                 onClicked: root.player.previous()
             }
         }
@@ -29,16 +30,19 @@ Item {
             height: 38
             radius: 19
             color: root.accentColor
+            opacity: root.player && root.player.canTogglePlaying ? 1 : 0.45
             anchors.verticalCenter: parent.verticalCenter
+
             Text {
                 anchors.centerIn: parent
                 text: root.player && root.player.isPlaying ? "Ⅱ" : "▶"
                 color: root.primaryText
                 font.pixelSize: 17
             }
+
             MouseArea {
                 anchors.fill: parent
-                enabled: root.player !== null
+                enabled: root.player !== null && root.player.canTogglePlaying
                 onClicked: root.player.togglePlaying()
             }
         }
@@ -46,12 +50,13 @@ Item {
         Text {
             text: "⏭"
             color: root.secondaryText
+            opacity: root.player && root.player.canGoNext ? 1 : 0.35
             font.pixelSize: 21
             anchors.verticalCenter: parent.verticalCenter
             MouseArea {
                 anchors.fill: parent
                 anchors.margins: -10
-                enabled: root.player !== null
+                enabled: root.player !== null && root.player.canGoNext
                 onClicked: root.player.next()
             }
         }
