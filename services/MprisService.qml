@@ -3,13 +3,35 @@ import Quickshell.Services.Mpris
 
 Item {
     id: root
+
     visible: false
     width: 0
     height: 0
 
-    property var player: Mpris.players.values.length > 0
-        ? Mpris.players.values[0] : null
+    // Prefer the player that is actively playing. If none is playing,
+    // prefer one that advertises playback control, then fall back to
+    // the first connected MPRIS player.
+    property var player: {
+        const availablePlayers = Mpris.players.values
+        if (!availablePlayers || availablePlayers.length === 0)
+            return null
 
+        for (let i = 0; i < availablePlayers.length; i++) {
+            const candidate = availablePlayers[i]
+            if (candidate.isPlaying && candidate.canTogglePlaying)
+                return candidate
+        }
+
+        for (let i = 0; i < availablePlayers.length; i++) {
+            const candidate = availablePlayers[i]
+            if (candidate.canTogglePlaying || candidate.canGoNext || candidate.canGoPrevious)
+                return candidate
+        }
+
+        return availablePlayers[0]
+    }
+
+    readonly property string playerIdentity: player ? player.identity : "No MPRIS player"
     readonly property string title: player
         ? (player.trackTitle || "Unknown title") : "Nothing playing"
     readonly property string artist: player
@@ -20,24 +42,66 @@ Item {
     readonly property real position: player ? player.position : 0
     readonly property real length: player ? player.length : 0
 
+    readonly property bool canTogglePlayback: player ? player.canTogglePlaying : false
+    readonly property bool canGoNext: player ? player.canGoNext : false
+    readonly property bool canGoPrevious: player ? player.canGoPrevious : false
+
     function togglePlayback() {
-        if (player) player.togglePlaying()
-    }
-    function next() {
-        if (player) player.next()
-    }
-    function previous() {
-        if (player) player.previous()
+        if (!player) {
+            console.warn("MPRIS: no player is available")
+            return
+        }
+
+        if (player.isPlaying) {
+            if (player.canPause)
+                player.pause()
+            else
+                console.warn("MPRIS: selected player does not support pause:", player.identity)
+        } else {
+            if (player.canPlay)
+                player.play()
+            else
+                console.warn("MPRIS: selected player does not support play:", player.identity)
+        }
     }
 
-    // MPRIS position is not guaranteed to emit frequent updates.
-    // Ask the active player to refresh while playback is running.
+    function next() {
+        if (player && player.canGoNext)
+            player.next()
+        else
+            console.warn("MPRIS: next is not supported by the selected player")
+    }
+
+    function previous() {
+        if (player && player.canGoPrevious)
+            player.previous()
+        else
+            console.warn("MPRIS: previous is not supported by the selected player")
+    }
+
+    onPlayerChanged: {
+        if (player) {
+            console.log(
+                "MPRIS selected:", player.identity,
+                "| playing:", player.isPlaying,
+                "| canPlay:", player.canPlay,
+                "| canPause:", player.canPause,
+                "| canNext:", player.canGoNext,
+                "| canPrevious:", player.canGoPrevious
+            )
+        } else {
+            console.log("MPRIS: waiting for a media player")
+        }
+    }
+
+    // Quickshell does not continuously emit position changes by default.
     Timer {
         interval: 1000
         running: root.player !== null && root.isPlaying
         repeat: true
         onTriggered: {
-            if (root.player) root.player.positionChanged()
+            if (root.player)
+                root.player.positionChanged()
         }
     }
 }
