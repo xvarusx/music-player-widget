@@ -21,7 +21,7 @@ qs -c music-card
 Enable the user-level systemd service:
 
 ```bash
-./scripts/install-autostart.sh
+bash scripts/install-autostart.sh
 ```
 
 Check its status and logs:
