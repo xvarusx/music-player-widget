@@ -10,27 +10,20 @@ Item {
 
     readonly property string settingsPath: Quickshell.shellDir + "/settings.json"
 
-    // Empty screenName means use the first currently connected monitor.
-    // A named monitor is preferred when it is connected, with safe fallback.
+    // Resolve the configured monitor by name on every screen-list change.
+    // Do not retain a ShellScreen object after its monitor is disconnected.
     readonly property var selectedScreen: {
         const screens = Quickshell.screens
         if (!screens || screens.length === 0)
             return null
 
         for (let i = 0; i < screens.length; i++) {
-            if (screens[i].name === settingsData.screenName)
+            if (settingsData.screenName !== ""
+                    && screens[i].name === settingsData.screenName)
                 return screens[i]
         }
 
         return screens[0]
-    }
-
-    function isTop() {
-        return settingsData.corner.indexOf("top-") === 0
-    }
-
-    function isLeft() {
-        return settingsData.corner.endsWith("-left")
     }
 
     FileView {
@@ -39,7 +32,7 @@ Item {
         watchChanges: true
         preload: true
 
-        adapter: JsonAdapter {
+        JsonAdapter {
             id: settingsData
 
             property string screenName: ""
@@ -64,9 +57,9 @@ Item {
         }
 
         onFileChanged: reload()
+        onSaveFailed: error => console.warn("Could not save music widget settings:", error)
     }
 
-    // Expose persisted values through stable read-only properties.
     readonly property string screenName: settingsData.screenName
     readonly property string corner: settingsData.corner
     readonly property int offsetX: settingsData.offsetX
