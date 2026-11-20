@@ -12,19 +12,31 @@ Item {
         anchors.centerIn: parent
         spacing: 24
 
+        // Seek backward by 10 seconds.
         Rectangle {
             width: 38
             height: 38
             radius: 19
             color: "transparent"
-            opacity: root.media && root.media.canGoPrevious ? 1 : 0.35
+            opacity: root.media && root.media.canSeek ? 1 : 0.35
             anchors.verticalCenter: parent.verticalCenter
 
-            Text {
+            Column {
                 anchors.centerIn: parent
-                text: "⏮"
-                color: root.secondaryText
-                font.pixelSize: 21
+                spacing: -2
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "↶"
+                    color: root.secondaryText
+                    font.pixelSize: 19
+                }
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "10"
+                    color: root.secondaryText
+                    font.pixelSize: 9
+                    font.bold: true
+                }
             }
 
             MouseArea {
@@ -32,11 +44,12 @@ Item {
                 acceptedButtons: Qt.LeftButton
                 hoverEnabled: true
                 cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-                enabled: root.media !== null && root.media.canGoPrevious
-                onClicked: root.media.previous()
+                enabled: root.media !== null && root.media.canSeek
+                onClicked: root.media.seekBackward()
             }
         }
 
+        // Play / pause.
         Rectangle {
             width: 42
             height: 42
@@ -62,19 +75,31 @@ Item {
             }
         }
 
+        // Seek forward by 10 seconds.
         Rectangle {
             width: 38
             height: 38
             radius: 19
             color: "transparent"
-            opacity: root.media && root.media.canGoNext ? 1 : 0.35
+            opacity: root.media && root.media.canSeek ? 1 : 0.35
             anchors.verticalCenter: parent.verticalCenter
 
-            Text {
+            Column {
                 anchors.centerIn: parent
-                text: "⏭"
-                color: root.secondaryText
-                font.pixelSize: 21
+                spacing: -2
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "↷"
+                    color: root.secondaryText
+                    font.pixelSize: 19
+                }
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "10"
+                    color: root.secondaryText
+                    font.pixelSize: 9
+                    font.bold: true
+                }
             }
 
             MouseArea {
@@ -82,8 +107,8 @@ Item {
                 acceptedButtons: Qt.LeftButton
                 hoverEnabled: true
                 cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-                enabled: root.media !== null && root.media.canGoNext
-                onClicked: root.media.next()
+                enabled: root.media !== null && root.media.canSeek
+                onClicked: root.media.seekForward()
             }
         }
     }
