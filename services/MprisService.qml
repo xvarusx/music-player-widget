@@ -45,6 +45,10 @@ Item {
     readonly property bool canTogglePlayback: player ? player.canTogglePlaying : false
     readonly property bool canGoNext: player ? player.canGoNext : false
     readonly property bool canGoPrevious: player ? player.canGoPrevious : false
+    readonly property bool canSeek: player ? player.canSeek : false
+
+    // Seek offsets are expressed in seconds by Quickshell's MprisPlayer API.
+    property real seekStep: 10
 
     function togglePlayback() {
         if (!player) {
@@ -65,18 +69,18 @@ Item {
         }
     }
 
-    function next() {
-        if (player && player.canGoNext)
-            player.next()
+    function seekBackward() {
+        if (player && player.canSeek)
+            player.seek(-seekStep)
         else
-            console.warn("MPRIS: next is not supported by the selected player")
+            console.warn("MPRIS: seeking is not supported by the selected player")
     }
 
-    function previous() {
-        if (player && player.canGoPrevious)
-            player.previous()
+    function seekForward() {
+        if (player && player.canSeek)
+            player.seek(seekStep)
         else
-            console.warn("MPRIS: previous is not supported by the selected player")
+            console.warn("MPRIS: seeking is not supported by the selected player")
     }
 
     onPlayerChanged: {
@@ -86,8 +90,7 @@ Item {
                 "| playing:", player.isPlaying,
                 "| canPlay:", player.canPlay,
                 "| canPause:", player.canPause,
-                "| canNext:", player.canGoNext,
-                "| canPrevious:", player.canGoPrevious
+                "| canSeek:", player.canSeek
             )
         } else {
             console.log("MPRIS: waiting for a media player")
