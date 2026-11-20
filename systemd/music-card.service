@@ -1,0 +1,13 @@
+[Unit]
+Description=Quickshell Music Card
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/qs -c music-card
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
