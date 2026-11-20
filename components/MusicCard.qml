@@ -91,7 +91,7 @@ Item {
             PlaybackControls {
                 width: parent.width
                 height: 42
-                player: root.media ? root.media.player : null
+                media: root.media
                 accentColor: root.accentColor
                 primaryText: root.primaryText
                 secondaryText: root.secondaryText
