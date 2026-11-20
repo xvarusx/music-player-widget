@@ -3,25 +3,8 @@ import QtQuick
 import "components"
 import "services"
 
-PanelWindow {
+Scope {
     id: root
-
-    anchors {
-        top: true
-        right: true
-    }
-
-    margins {
-        top: 75
-        right: 30
-    }
-
-    implicitWidth: 360
-    implicitHeight: 350
-
-    color: "transparent"
-    exclusiveZone: 0
-    focusable: false
 
     ThemeService {
         id: theme
@@ -29,6 +12,10 @@ PanelWindow {
 
     MprisService {
         id: media
+    }
+
+    WidgetSettings {
+        id: settings
     }
 
     property date currentTime: new Date()
@@ -40,10 +27,38 @@ PanelWindow {
         onTriggered: root.currentTime = new Date()
     }
 
-    MusicCard {
-        anchors.fill: parent
-        theme: theme
-        media: media
-        currentTime: root.currentTime
+    PanelWindow {
+        id: widgetWindow
+
+        screen: settings.selectedScreen
+
+        anchors {
+            top: settings.corner.indexOf("top-") === 0
+            bottom: settings.corner.indexOf("bottom-") === 0
+            left: settings.corner.endsWith("-left")
+            right: settings.corner.endsWith("-right")
+        }
+
+        margins {
+            top: settings.corner.indexOf("top-") === 0 ? settings.offsetY : 0
+            bottom: settings.corner.indexOf("bottom-") === 0 ? settings.offsetY : 0
+            left: settings.corner.endsWith("-left") ? settings.offsetX : 0
+            right: settings.corner.endsWith("-right") ? settings.offsetX : 0
+        }
+
+        implicitWidth: settings.widgetWidth
+        implicitHeight: settings.widgetHeight
+
+        color: "transparent"
+        exclusiveZone: 0
+        focusable: false
+        visible: settings.selectedScreen !== null
+
+        MusicCard {
+            anchors.fill: parent
+            theme: theme
+            media: media
+            currentTime: root.currentTime
+        }
     }
 }

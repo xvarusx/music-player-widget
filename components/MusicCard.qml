@@ -83,6 +83,7 @@ Item {
                 width: parent.width
                 position: root.media ? root.media.position : 0
                 duration: root.media ? root.media.length : 0
+                media: root.media
                 accentColor: root.accentColor
                 trackColor: root.borderColor
                 secondaryText: root.secondaryText
