@@ -1,71 +1,78 @@
 # Quickshell Music Player Widget
 
-A small music and clock widget for Omarchy using Quickshell and MPRIS.
+A clock and MPRIS music widget for Omarchy using Quickshell 0.3.2.
 
 ## Requirements
 
 - Omarchy / Arch Linux
 - Quickshell 0.3.2
-- A media player that exposes an MPRIS interface
+- A media player exposing MPRIS
 
-## Run
+## Run manually
 
-```bash
-qs -c music-card
-```
-
-The Quickshell configuration directory should contain this repository as
-`~/.config/quickshell/music-card/`.
-
-## Project structure
-
-```text
-music-card/
-├── shell.qml
-├── components/
-│   ├── AlbumArtwork.qml
-│   ├── Equalizer.qml
-│   ├── MusicCard.qml
-│   ├── PlaybackControls.qml
-│   ├── ProgressBar.qml
-│   └── TrackInfo.qml
-└── services/
-    ├── MprisService.qml
-    └── ThemeService.qml
-```
-
-- **ThemeService** reads Omarchy's active `colors.toml`, watches for changes, and periodically reloads the file to handle theme symlink changes.
-- **MprisService** exposes the selected MPRIS player and its metadata/playback controls to the UI.
-- **MusicCard** composes the clock, artwork, track information, equalizer, progress display, and playback controls.
-
-## Local verification
-
-After updating the repository, restart the Quickshell configuration:
+Install this repository at `~/.config/quickshell/music-card/`, then run:
 
 ```bash
 qs -c music-card
 ```
 
-If the configuration is already running, reload it using your usual Quickshell workflow or stop and launch it again.
+## Automatic startup
 
-Test with a player that exposes MPRIS metadata:
+Enable the user-level systemd service:
 
 ```bash
-playerctl metadata
+./scripts/install-autostart.sh
+```
+
+Check its status and logs:
+
+```bash
+systemctl --user status music-card.service
+journalctl --user -u music-card.service -f
+```
+
+Disable automatic startup:
+
+```bash
+systemctl --user disable --now music-card.service
+```
+
+## Persistent configuration
+
+Settings are stored in `settings.json` next to `shell.qml`. This file is intentionally ignored by Git so personal monitor and layout preferences do not become repository changes.
+
+Example:
+
+```json
+{
+  "screenName": "DP-1",
+  "corner": "top-right",
+  "offsetX": 30,
+  "offsetY": 75,
+  "width": 360,
+  "height": 350
+}
+```
+
+- `screenName`: exact monitor name, such as `DP-1`, `HDMI-A-1`, or `eDP-1`. Empty selects the first connected screen.
+- `corner`: `top-left`, `top-right`, `bottom-left`, or `bottom-right`.
+- `offsetX` and `offsetY`: distance from the selected corner in logical pixels.
+- `width` and `height`: widget dimensions in logical pixels.
+
+The widget is created only once. If the configured monitor is disconnected, it falls back to the first connected monitor; when the configured monitor returns, it is selected again. Available monitor names are printed in the Quickshell logs.
+
+## Features
+
+- Omarchy theme colors reload when the active theme changes.
+- MPRIS metadata, artwork, play/pause and 10-second seek controls.
+- Click the progress track to seek to the clicked position (when MPRIS seeking is supported).
+- Animated equalizer while playing.
+- One-second playback position refresh.
+
+## Verify
+
+```bash
+playerctl -l
 playerctl status
+journalctl --user -u music-card.service -f
 ```
-
-Then verify:
-
-1. The widget displays the current title and artist.
-2. Artwork appears when the MPRIS player provides a readable art URL.
-3. Play/pause and previous/next work when the player advertises those capabilities.
-4. The progress display advances during playback.
-5. Switching Omarchy themes updates the widget colors.
-
-## Current implementation notes
-
-- The first available MPRIS player is selected, matching the initial widget.
-- Artwork uses the MPRIS `trackArtUrl`; a musical-note placeholder is shown if artwork is missing or cannot be loaded.
-- Position is refreshed once per second during playback.
-- Progress seeking and frame-smooth animation are not implemented yet.
