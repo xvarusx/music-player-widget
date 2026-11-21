@@ -1,2 +1,5 @@
 # User-specific persistent Quickshell settings
 settings.json
+.opencode/
+.superpowers/
+
