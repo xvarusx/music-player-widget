@@ -53,7 +53,6 @@ Item {
             color: root.pillBg
             radius: 16
 
-            // Scroll anywhere over the volume pill to adjust system output volume.
             MouseArea {
                 anchors.fill: parent
                 onWheel: wheel => {
@@ -87,11 +86,14 @@ Item {
                 Item {
                     id: volumeTrack
                     width: 103
-                    height: 7
+                    height: 18
                     anchors.verticalCenter: parent.verticalCenter
 
                     Rectangle {
-                        anchors.fill: parent
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: 7
                         radius: height / 2
                         color: root.trackColor
                         opacity: 0.9
@@ -100,28 +102,31 @@ Item {
                     Rectangle {
                         width: parent.width * (root.audio && root.audio.available
                             ? Math.max(0, Math.min(1, root.audio.volume)) : 0)
-                        height: parent.height
+                        height: 7
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
                         radius: height / 2
                         color: root.accentColor
 
                         Behavior on width {
                             NumberAnimation {
-                                duration: 140
+                                duration: 100
                                 easing.type: Easing.OutCubic
                             }
                         }
                     }
 
-                    // Click or drag along the bar to set the volume directly.
+                    // A full-height hit target makes click-and-hold dragging reliable.
                     MouseArea {
                         anchors.fill: parent
-                        anchors.margins: -7
                         enabled: root.audio && root.audio.available
                         cursorShape: Qt.PointingHandCursor
+                        preventStealing: true
+                        hoverEnabled: true
 
                         function setFromMouse(mouseX) {
-                            const x = Math.max(0, Math.min(width, mouseX))
-                            root.audio.setVolume(x / width)
+                            const ratio = Math.max(0, Math.min(1, mouseX / width))
+                            root.audio.setVolume(ratio)
                         }
 
                         onPressed: mouse => setFromMouse(mouse.x)
@@ -129,6 +134,7 @@ Item {
                             if (pressed)
                                 setFromMouse(mouse.x)
                         }
+                        onReleased: mouse => setFromMouse(mouse.x)
                     }
                 }
             }

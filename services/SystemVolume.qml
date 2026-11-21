@@ -21,20 +21,20 @@ Item {
             volumeQuery.running = true
     }
 
-    // Mouse-wheel adjustment in 5% increments.
     function adjustVolume(direction) {
         if (direction === 0)
             return
 
+        pendingAbsoluteVolume = -1
         pendingSteps = Math.max(-20, Math.min(20,
             pendingSteps + (direction > 0 ? 1 : -1)))
         runNextAdjustment()
     }
 
-    // Direct mouse click/drag on the bar sets an exact volume percentage.
+    // Click/drag on the meter sets an absolute volume between 0 and 100%.
     function setVolume(value) {
-        pendingAbsoluteVolume = Math.max(0, Math.min(1, value))
         pendingSteps = 0
+        pendingAbsoluteVolume = Math.max(0, Math.min(1, value))
         runNextAdjustment()
     }
 
@@ -66,9 +66,11 @@ Item {
     }
 
     function updateFromOutput(output) {
-        const match = output.match(/Volume:\\s*([0-9]+(?:\\.[0-9]+)?)/)
+        // wpctl prints e.g. "Volume: 0.50" (decimal fraction, not percent).
+        const match = output.match(/Volume:\s*([0-9]+(?:\.[0-9]+)?)/)
         if (!match) {
             available = false
+            console.warn("Could not parse wpctl volume output:", output)
             return
         }
 
@@ -86,8 +88,10 @@ Item {
         }
 
         onExited: (exitCode, exitStatus) => {
-            if (exitCode !== 0)
+            if (exitCode !== 0) {
                 root.available = false
+                console.warn("System volume: wpctl get-volume failed with exit code", exitCode)
+            }
         }
     }
 
