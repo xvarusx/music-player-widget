@@ -14,12 +14,14 @@ Item {
     property bool muted: false
     property bool available: false
     property int pendingSteps: 0
+    property real pendingAbsoluteVolume: -1
 
     function refresh() {
         if (!volumeQuery.running)
             volumeQuery.running = true
     }
 
+    // Mouse-wheel adjustment in 5% increments.
     function adjustVolume(direction) {
         if (direction === 0)
             return
@@ -29,13 +31,33 @@ Item {
         runNextAdjustment()
     }
 
+    // Direct mouse click/drag on the bar sets an exact volume percentage.
+    function setVolume(value) {
+        pendingAbsoluteVolume = Math.max(0, Math.min(1, value))
+        pendingSteps = 0
+        runNextAdjustment()
+    }
+
     function runNextAdjustment() {
-        if (volumeCommand.running || pendingSteps === 0)
+        if (volumeCommand.running)
+            return
+
+        if (pendingAbsoluteVolume >= 0) {
+            const target = Math.round(pendingAbsoluteVolume * 100)
+            pendingAbsoluteVolume = -1
+            volumeCommand.command = [
+                "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@",
+                target + "%", "--limit", "1.0"
+            ]
+            volumeCommand.running = true
+            return
+        }
+
+        if (pendingSteps === 0)
             return
 
         const step = pendingSteps > 0 ? "5%+" : "5%-"
         pendingSteps += pendingSteps > 0 ? -1 : 1
-
         volumeCommand.command = [
             "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", step,
             "--limit", "1.0"
@@ -44,7 +66,7 @@ Item {
     }
 
     function updateFromOutput(output) {
-        const match = output.match(/Volume:\s*([0-9]+(?:\.[0-9]+)?)/)
+        const match = output.match(/Volume:\\s*([0-9]+(?:\\.[0-9]+)?)/)
         if (!match) {
             available = false
             return
@@ -76,7 +98,7 @@ Item {
             if (exitCode !== 0)
                 console.warn("System volume: wpctl set-volume failed with exit code", exitCode)
 
-            if (root.pendingSteps !== 0)
+            if (root.pendingAbsoluteVolume >= 0 || root.pendingSteps !== 0)
                 root.runNextAdjustment()
             else
                 root.refresh()

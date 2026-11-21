@@ -8,6 +8,7 @@ Item {
     property var audio: null
     property color accentColor: "transparent"
     property color primaryText: "transparent"
+    property color trackColor: "transparent"
     readonly property color pillBg: theme ? theme.borderColor : "transparent"
 
     width: parent.width
@@ -52,6 +53,7 @@ Item {
             color: root.pillBg
             radius: 16
 
+            // Scroll anywhere over the volume pill to adjust system output volume.
             MouseArea {
                 anchors.fill: parent
                 onWheel: wheel => {
@@ -64,11 +66,11 @@ Item {
             Row {
                 anchors.fill: parent
                 anchors.leftMargin: 11
-                anchors.rightMargin: 9
-                spacing: 8
+                anchors.rightMargin: 11
+                spacing: 9
 
                 Text {
-                    width: 48
+                    width: 43
                     text: {
                         if (!root.audio || !root.audio.available)
                             return "--%"
@@ -83,37 +85,50 @@ Item {
                 }
 
                 Item {
-                    width: 55
-                    height: 1
-                }
-
-                Text {
-                    text: "−"
-                    color: root.accentColor
-                    font.pixelSize: 20
-                    font.weight: Font.Bold
+                    id: volumeTrack
+                    width: 103
+                    height: 7
                     anchors.verticalCenter: parent.verticalCenter
 
-                    MouseArea {
+                    Rectangle {
                         anchors.fill: parent
-                        anchors.margins: -5
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: if (root.audio) root.audio.adjustVolume(-1)
+                        radius: height / 2
+                        color: root.trackColor
+                        opacity: 0.9
                     }
-                }
 
-                Text {
-                    text: "+"
-                    color: root.accentColor
-                    font.pixelSize: 18
-                    font.weight: Font.Bold
-                    anchors.verticalCenter: parent.verticalCenter
+                    Rectangle {
+                        width: parent.width * (root.audio && root.audio.available
+                            ? Math.max(0, Math.min(1, root.audio.volume)) : 0)
+                        height: parent.height
+                        radius: height / 2
+                        color: root.accentColor
 
+                        Behavior on width {
+                            NumberAnimation {
+                                duration: 140
+                                easing.type: Easing.OutCubic
+                            }
+                        }
+                    }
+
+                    // Click or drag along the bar to set the volume directly.
                     MouseArea {
                         anchors.fill: parent
-                        anchors.margins: -5
+                        anchors.margins: -7
+                        enabled: root.audio && root.audio.available
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: if (root.audio) root.audio.adjustVolume(1)
+
+                        function setFromMouse(mouseX) {
+                            const x = Math.max(0, Math.min(width, mouseX))
+                            root.audio.setVolume(x / width)
+                        }
+
+                        onPressed: mouse => setFromMouse(mouse.x)
+                        onPositionChanged: mouse => {
+                            if (pressed)
+                                setFromMouse(mouse.x)
+                        }
                     }
                 }
             }
