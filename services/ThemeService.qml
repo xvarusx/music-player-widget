@@ -14,6 +14,20 @@ Item {
     property var themeColors: ({})
     property string themeMode: themeColors["mode"] || "unknown"
 
+    // Desktop widgets are unfocused surfaces, so follow Hyprland's
+    // inactive window opacity setting from Omarchy's Window Opacity control.
+    property real cardOpacity: 1.0
+
+    function updateCardOpacity(output) {
+        try {
+            const settings = JSON.parse(output)
+            if (settings && Number.isFinite(settings.float))
+                cardOpacity = Math.max(0.0, Math.min(1.0, settings.float))
+        } catch (error) {
+            console.warn("Could not parse Hyprland inactive opacity:", error)
+        }
+    }
+
     SystemPalette {
         id: fallbackPalette
     }
@@ -74,10 +88,30 @@ Item {
         onLoadFailed: error => console.warn("Could not load Omarchy colors.toml:", error)
     }
 
+    Process {
+        id: opacityQuery
+        command: ["hyprctl", "getoption", "decoration:inactive_opacity", "-j"]
+
+        stdout: StdioCollector {
+            onStreamFinished: root.updateCardOpacity(this.text)
+        }
+
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0)
+                console.warn("Could not read Hyprland inactive window opacity; keeping current card opacity")
+        }
+    }
+
     Timer {
-        interval: 5000
+        interval: 2000
         running: true
         repeat: true
-        onTriggered: themeFile.reload()
+        onTriggered: {
+            themeFile.reload()
+            if (!opacityQuery.running)
+                opacityQuery.exec()
+        }
     }
+
+    Component.onCompleted: opacityQuery.exec()
 }
