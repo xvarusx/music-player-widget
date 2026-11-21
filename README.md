@@ -7,6 +7,7 @@ A clock and MPRIS music widget for Omarchy using Quickshell 0.3.2.
 - Omarchy / Arch Linux
 - Quickshell 0.3.2
 - A media player exposing MPRIS
+- PipeWire / WirePlumber (`wpctl`) for system output volume control
 
 ## Run manually
 
@@ -65,14 +66,16 @@ The widget is created only once. If the configured monitor is disconnected, it f
 
 - Omarchy theme colors reload when the active theme changes.
 - MPRIS metadata, artwork, play/pause and 10-second seek controls.
+- Scroll up/down over the volume pill to adjust the default PipeWire output volume in 5% steps using `wpctl`.
+- System volume is polled so changes made by keyboard shortcuts or another mixer are reflected in the widget.
 - Click the progress track to seek to the clicked position (when MPRIS seeking is supported).
 - Animated equalizer while playing.
-- One-second playback position refresh.
 
 ## Verify
 
 ```bash
 playerctl -l
 playerctl status
+wpctl get-volume @DEFAULT_AUDIO_SINK@
 journalctl --user -u music-card.service -f
 ```

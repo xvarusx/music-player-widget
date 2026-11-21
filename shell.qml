@@ -14,6 +14,10 @@ Scope {
         id: media
     }
 
+    SystemVolume {
+        id: audio
+    }
+
     WidgetSettings {
         id: settings
     }
@@ -58,6 +62,7 @@ Scope {
             anchors.fill: parent
             theme: theme
             media: media
+            audio: audio
         }
     }
 }

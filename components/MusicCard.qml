@@ -4,6 +4,7 @@ Item {
     id: root
     property var theme: null
     property var media: null
+    property var audio: null
 
     readonly property color cardColor: theme ? theme.cardColor : "#24283b"
     readonly property color accentColor: theme ? theme.accentColor : "#7aa2f7"
@@ -33,6 +34,7 @@ Item {
                 width: parent.width
                 theme: root.theme
                 media: root.media
+                audio: root.audio
             }
 
             Row {
@@ -60,8 +62,8 @@ Item {
 
             ProgressBar {
                 width: parent.width
-                position: root.media ? root.media.position : 17000
-                duration: root.media ? root.media.length : 125000
+                position: root.media ? root.media.position : 0
+                duration: root.media ? root.media.length : 0
                 media: root.media
                 accentColor: root.accentColor
                 trackColor: root.borderColor

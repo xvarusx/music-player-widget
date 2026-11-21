@@ -3,6 +3,8 @@ import QtQuick
 Column {
     id: root
 
+    // Quickshell MprisPlayer.position and length are expressed in seconds,
+    // with millisecond precision. Do not divide them by 1000.
     property real position: 0
     property real duration: 0
     property var media: null
@@ -50,8 +52,9 @@ Column {
         width: root.width
         height: 16
 
-        Text { anchors.left: parent.left
-            text: formatTime(root.position / 1000)
+        Text {
+            anchors.left: parent.left
+            text: root.formatTime(root.position)
             color: "#5F6B7A"
             font.family: "Roboto Mono"
             font.pixelSize: 12
@@ -59,7 +62,7 @@ Column {
 
         Text {
             anchors.right: parent.right
-            text: formatTime(root.duration / 1000)
+            text: root.duration > 0 ? root.formatTime(root.duration) : "--:--"
             color: "#5F6B7A"
             font.family: "Roboto Mono"
             font.pixelSize: 12
