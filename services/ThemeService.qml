@@ -8,25 +8,63 @@ Item {
     width: 0
     height: 0
 
-    property string themePath: Quickshell.env("HOME")
+    // Omarchy publishes the active palette here whenever a theme is applied.
+    readonly property string themePath: Quickshell.env("HOME")
         + "/.local/state/omarchy/current/theme/colors.toml"
 
-    property color cardColor: themeColor("lighter_background", "#24283b")
-    property color accentColor: themeColor("accent", "#7aa2f7")
-    property color primaryText: themeColor("bright_foreground", "#c0caf5")
-    property color secondaryText: themeColor("foreground", "#a9b1d6")
-    property color borderColor: themeColor("muted", "#414868")
-    property color secondaryAccent: themeColor("magenta", "#ad8ee6")
-    property string themeMode: themeColor("mode", "dark")
+    property var themeColors: ({})
+    property string themeMode: themeColors["mode"] || "unknown"
 
-    function themeColor(name, fallback) {
+    SystemPalette {
+        id: fallbackPalette
+    }
+
+    // All widget colors come from the active Omarchy colors.toml.
+    // SystemPalette is only a graceful fallback if Omarchy's file is unavailable.
+    readonly property color cardColor:
+        themeColors["lighter_background"] || themeColors["background"] || fallbackPalette.window
+    readonly property color accentColor:
+        themeColors["accent"] || themeColors["blue"] || fallbackPalette.highlight
+    readonly property color primaryText:
+        themeColors["foreground"] || fallbackPalette.windowText
+    readonly property color secondaryText:
+        themeColors["dark_foreground"] || themeColors["muted"] || fallbackPalette.mid
+    readonly property color borderColor:
+        themeColors["muted"] || fallbackPalette.mid
+    readonly property color mutedColor:
+        themeColors["muted"] || fallbackPalette.mid
+    readonly property color secondaryAccent:
+        themeColors["magenta"] || themeColors["blue"] || fallbackPalette.highlight
+    readonly property color trackColor:
+        themeColors["dark_background"] || themeColors["background"] || fallbackPalette.base
+
+    function parseTheme() {
         const content = themeFile.text()
-        const expression = new RegExp(
-            "^\\s*" + name + "\\s*=\\s*[\\\"']([^\\\"']+)[\\\"']",
-            "m"
-        )
-        const match = content.match(expression)
-        return match ? match[1] : fallback
+        if (!content || content.length === 0) {
+            console.warn("Omarchy theme palette is empty:", themePath)
+            return
+        }
+
+        const parsed = {}
+        const lines = content.split(/\\r?\\n/)
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim()
+            if (!line || line.startsWith("#"))
+                continue
+
+            const separator = line.indexOf("=")
+            if (separator < 1)
+                continue
+
+            const key = line.slice(0, separator).trim()
+            let value = line.slice(separator + 1).trim()
+            value = value.replace(/^["']|["']$/g, "")
+            if (key && value)
+                parsed[key] = value
+        }
+
+        themeColors = parsed
+        console.log("Loaded Omarchy palette:", themePath, "| mode:", themeMode)
     }
 
     FileView {
@@ -34,11 +72,12 @@ Item {
         path: root.themePath
         watchChanges: true
         preload: true
+        onLoaded: root.parseTheme()
         onFileChanged: reload()
-        onLoaded: console.log("Omarchy theme loaded successfully")
-        onLoadFailed: error => console.warn("Theme loading failed:", error)
+        onLoadFailed: error => console.warn("Could not load Omarchy colors.toml:", error)
     }
 
+    // The file watcher handles theme switches; this also recovers from missed events.
     Timer {
         interval: 5000
         running: true

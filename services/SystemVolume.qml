@@ -1,9 +1,8 @@
 import QtQuick
 import Quickshell.Io
 
-// Controls and monitors the default PipeWire playback sink via wpctl.
-// MPRIS volume is intentionally not used: it controls per-player volume
-// and is not consistently supported by media applications.
+// Controls the default PipeWire playback sink with wpctl.
+// Quickshell.Io.Process is started by setting running=true; it has no exec() method.
 Item {
     id: root
 
@@ -19,11 +18,11 @@ Item {
 
     function refresh() {
         if (!volumeQuery.running)
-            volumeQuery.exec(["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"])
+            volumeQuery.running = true
     }
 
     function adjustVolume(direction) {
-        if (direction === 0)
+        if (!available || direction === 0)
             return
 
         pendingSteps = Math.max(-20, Math.min(20,
@@ -37,14 +36,17 @@ Item {
 
         const step = pendingSteps > 0 ? "5%+" : "5%-"
         pendingSteps += pendingSteps > 0 ? -1 : 1
-        volumeCommand.exec([
+
+        // Each Process argument is passed separately; no shell is involved.
+        volumeCommand.command = [
             "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", step,
             "--limit", "1.0"
-        ])
+        ]
+        volumeCommand.running = true
     }
 
     function updateFromOutput(output) {
-        const match = output.match(/Volume:\s*([0-9]+(?:\.[0-9]+)?)/)
+        const match = output.match(/Volume:\\s*([0-9]+(?:\\.[0-9]+)?)/)
         if (!match) {
             available = false
             return
@@ -83,9 +85,9 @@ Item {
         }
     }
 
-    // Also reflect changes made outside the widget (keyboard keys, mixer, etc.).
+    // Reflect changes made by keyboard shortcuts, the system OSD or another mixer.
     Timer {
-        interval: 1500
+        interval: 1000
         running: true
         repeat: true
         onTriggered: root.refresh()

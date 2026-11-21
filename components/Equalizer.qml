@@ -4,8 +4,9 @@ Item {
     id: root
 
     property bool playing: false
-    property color accentColor: "#7aa2f7"
-    property color secondaryAccent: "#ad8ee6"
+    property color accentColor: "transparent"
+    property color secondaryAccent: "transparent"
+    property color mutedColor: "transparent"
 
     Row {
         anchors.centerIn: parent
@@ -27,13 +28,12 @@ Item {
                     radius: 2
                     anchors.verticalCenter: parent.verticalCenter
                     color: (index >= 9 && index <= 12) || (index >= 20 && index <= 21) || (index >= 29 && index <= 36)
-                        ? root.accentColor : "#5F6B7A"
+                        ? root.accentColor : root.mutedColor
 
                     SequentialAnimation on height {
-                        id: barAnimation
                         running: root.playing
                         loops: Animation.Infinite
-                        
+
                         NumberAnimation {
                             to: (index >= 9 && index <= 12) || (index >= 20 && index <= 21) || (index >= 29 && index <= 36)
                                 ? (8 + (index * 3) % 15) : (4 + (index * 2) % 8)

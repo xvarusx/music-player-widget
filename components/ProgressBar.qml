@@ -3,14 +3,13 @@ import QtQuick
 Column {
     id: root
 
-    // Quickshell MprisPlayer.position and length are expressed in seconds,
-    // with millisecond precision. Do not divide them by 1000.
+    // Quickshell MprisPlayer.position and length are already in seconds.
     property real position: 0
     property real duration: 0
     property var media: null
-    property color accentColor: "#7aa2f7"
-    property color trackColor: "#414868"
-    property color secondaryText: "#a9b1d6"
+    property color accentColor: "transparent"
+    property color trackColor: "transparent"
+    property color secondaryText: "transparent"
 
     readonly property real progress: duration > 0
         ? Math.max(0, Math.min(1, position / duration)) : 0
@@ -24,7 +23,7 @@ Column {
         width: root.width
         height: 4
         radius: 2
-        color: "#2F343E"
+        color: root.trackColor
         clip: true
 
         Rectangle {
@@ -55,7 +54,7 @@ Column {
         Text {
             anchors.left: parent.left
             text: root.formatTime(root.position)
-            color: "#5F6B7A"
+            color: root.secondaryText
             font.family: "Roboto Mono"
             font.pixelSize: 12
         }
@@ -63,7 +62,7 @@ Column {
         Text {
             anchors.right: parent.right
             text: root.duration > 0 ? root.formatTime(root.duration) : "--:--"
-            color: "#5F6B7A"
+            color: root.secondaryText
             font.family: "Roboto Mono"
             font.pixelSize: 12
         }

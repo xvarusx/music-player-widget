@@ -6,12 +6,14 @@ Item {
     property var media: null
     property var audio: null
 
-    readonly property color cardColor: theme ? theme.cardColor : "#24283b"
-    readonly property color accentColor: theme ? theme.accentColor : "#7aa2f7"
-    readonly property color primaryText: theme ? theme.primaryText : "#c0caf5"
-    readonly property color secondaryText: theme ? theme.secondaryText : "#a9b1d6"
-    readonly property color borderColor: theme ? theme.borderColor : "#414868"
-    readonly property color secondaryAccent: theme ? theme.secondaryAccent : "#ad8ee6"
+    readonly property color cardColor: theme ? theme.cardColor : "transparent"
+    readonly property color accentColor: theme ? theme.accentColor : "transparent"
+    readonly property color primaryText: theme ? theme.primaryText : "transparent"
+    readonly property color secondaryText: theme ? theme.secondaryText : "transparent"
+    readonly property color borderColor: theme ? theme.borderColor : "transparent"
+    readonly property color mutedColor: theme ? theme.mutedColor : "transparent"
+    readonly property color trackColor: theme ? theme.trackColor : "transparent"
+    readonly property color secondaryAccent: theme ? theme.secondaryAccent : "transparent"
 
     width: 380
 
@@ -35,6 +37,8 @@ Item {
                 theme: root.theme
                 media: root.media
                 audio: root.audio
+                accentColor: root.accentColor
+                primaryText: root.primaryText
             }
 
             Row {
@@ -47,14 +51,15 @@ Item {
                     source: root.media ? root.media.artworkUrl : ""
                     accentColor: root.accentColor
                     borderColor: root.borderColor
+                    placeholderColor: root.cardColor
                 }
 
                 TrackInfo {
                     width: parent.width - 98 - 18
                     anchors.verticalCenter: parent.verticalCenter
-                    title: root.media ? root.media.title : "INSANITY"
-                    artist: root.media ? root.media.artist : "WIL$ON"
-                    album: root.media ? root.media.album : "Method Acting : act I"
+                    title: root.media ? root.media.title : "Nothing playing"
+                    artist: root.media ? root.media.artist : "Start playing music"
+                    album: root.media ? root.media.album : ""
                     primaryText: root.primaryText
                     secondaryText: root.secondaryText
                 }
@@ -66,7 +71,7 @@ Item {
                 duration: root.media ? root.media.length : 0
                 media: root.media
                 accentColor: root.accentColor
-                trackColor: root.borderColor
+                trackColor: root.trackColor
                 secondaryText: root.secondaryText
             }
 
@@ -85,21 +90,18 @@ Item {
                 playing: root.media ? root.media.isPlaying : false
                 accentColor: root.accentColor
                 secondaryAccent: root.secondaryAccent
+                mutedColor: root.mutedColor
             }
 
             Item {
                 width: parent.width
                 height: 3
-                Row {
+                Rectangle {
                     anchors.centerIn: parent
                     width: 36
                     height: 3
-                    Rectangle {
-                        width: 36
-                        height: 3
-                        radius: 1.5
-                        color: root.borderColor
-                    }
+                    radius: 1.5
+                    color: root.borderColor
                 }
             }
         }
