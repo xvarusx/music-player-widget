@@ -5,3 +5,4 @@ Pre-flight: no shared interfaces.
 - [x] Task 2: Implement New Header Row (in_progress)
 - [x] Task 3: Update Track Info and Album Art (in_progress)
 - [x] Task 4: Redesign Progress and Controls (in_progress)
+- [x] Task 5: Implement Wave Spectrum Visualizer (in_progress)
