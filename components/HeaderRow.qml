@@ -6,7 +6,8 @@ Item {
 
     property var theme: null
     property var media: null
-
+    property color accentColor: "#7aa2f7"
+    property color secondaryAccent: "#ad8ee6"
     readonly property color pillBg: theme ? theme.borderColor : "#2A2E36"
     readonly property color textColor: theme ? theme.primaryText : "#8B97A6"
     readonly property color dimColor: theme ? theme.secondaryText : "#5F6B7A"
@@ -30,20 +31,12 @@ Item {
                 anchors.centerIn: parent
                 spacing: 7
 
-                Rectangle {
-                    width: 6
-                    height: 6
-                    radius: 3
-                    color: root.textColor
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
                 Text {
                     text: root.media.playerIdentity ? root.media.playerIdentity : "Spotify"
-                    color: root.textColor
+                    color: root.accentColor
                     font.family: "Inter"
                     font.pixelSize: 13
-                    font.weight: Font.Medium
+                    font.weight: Font.Bold
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -57,7 +50,7 @@ Item {
 
         // Volume Pill
         Rectangle {
-            width: 160
+            width: 177
             height: 32
             color: root.pillBg
             radius: 16
@@ -69,18 +62,19 @@ Item {
                 spacing: parent.width - 64 
 
                 Text {
-                    text: "🎧"
-                    font.pixelSize: 13
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Text {
                     text: media ? Math.round(media.volume * 100) + "%" : "100%"
-                    color: root.textColor
+                    color: root.accentColor
                     font.family: "Inter"
                     font.pixelSize: 12
                     font.weight: Font.Bold
                     anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Text {
+                  text: "🕪"
+                  color: root.accentColor
+                  font.pixelSize: 12
+                  anchors.verticalCenter: parent.verticalCenter
                 }
             }
 

@@ -29,7 +29,7 @@ Column {
             width: parent.width * root.progress
             height: parent.height
             radius: 2
-            color: "#6E879C"
+            color: root.accentColor
         }
 
         MouseArea {
@@ -50,8 +50,7 @@ Column {
         width: root.width
         height: 16
 
-        Text {
-            anchors.left: parent.left
+        Text { anchors.left: parent.left
             text: formatTime(root.position / 1000)
             color: "#5F6B7A"
             font.family: "Roboto Mono"

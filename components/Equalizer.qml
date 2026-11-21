@@ -27,7 +27,7 @@ Item {
                     radius: 2
                     anchors.verticalCenter: parent.verticalCenter
                     color: (index >= 9 && index <= 12) || (index >= 20 && index <= 21) || (index >= 29 && index <= 36)
-                        ? "#6E879C" : "#5F6B7A"
+                        ? root.accentColor : "#5F6B7A"
 
                     SequentialAnimation on height {
                         id: barAnimation
