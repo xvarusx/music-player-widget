@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 
 Item {
     id: root
@@ -9,22 +10,17 @@ Item {
     width: 98
     height: 98
 
-    // Background circle
     Rectangle {
         anchors.fill: parent
-        radius: 49
+        radius: Math.min(width, height) / 2
         color: root.borderColor
         opacity: 0.45
     }
 
-    // Container with circular clipping
-    Rectangle {
+    Item {
         id: clipArea
         anchors.fill: parent
-        radius: 49
-        color: "transparent"
-        
-        // Album artwork image - clipped by parent rectangle's radius
+
         Image {
             id: artwork
             anchors.fill: parent
@@ -36,18 +32,43 @@ Item {
             smooth: true
             mipmap: true
             opacity: status === Image.Ready ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
+
+            // A rounded Rectangle behind an Image does not clip its children.
+            // MultiEffect applies a true alpha-circle mask to the image itself.
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                maskEnabled: true
+                maskSource: circleMaskTexture
+                maskThresholdMin: 0.5
+                maskSpreadAtMin: 0.02
             }
-            clip: true
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 220
+                    easing.type: Easing.OutCubic
+                }
+            }
         }
 
-        // Fallback placeholder
+        Rectangle {
+            id: circleMask
+            anchors.fill: artwork
+            radius: Math.min(width, height) / 2
+            color: "white"
+        }
+
+        ShaderEffectSource {
+            id: circleMaskTexture
+            sourceItem: circleMask
+            hideSource: true
+        }
+
         Rectangle {
             anchors.fill: parent
             anchors.margins: 1
             visible: artwork.status !== Image.Ready
-            radius: 48
+            radius: Math.min(width, height) / 2
             gradient: Gradient {
                 GradientStop { position: 0; color: "#544E3D" }
                 GradientStop { position: 0.6; color: "#3B372B" }
@@ -56,10 +77,9 @@ Item {
         }
     }
 
-    // Border
     Rectangle {
         anchors.fill: parent
-        radius: 49
+        radius: Math.min(width, height) / 2
         color: "transparent"
         border.width: 1
         border.color: root.borderColor
