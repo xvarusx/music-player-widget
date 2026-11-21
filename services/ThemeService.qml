@@ -8,7 +8,6 @@ Item {
     width: 0
     height: 0
 
-    // Omarchy publishes the active palette here whenever a theme is applied.
     readonly property string themePath: Quickshell.env("HOME")
         + "/.local/state/omarchy/current/theme/colors.toml"
 
@@ -19,8 +18,6 @@ Item {
         id: fallbackPalette
     }
 
-    // All widget colors come from the active Omarchy colors.toml.
-    // SystemPalette is only a graceful fallback if Omarchy's file is unavailable.
     readonly property color cardColor:
         themeColors["lighter_background"] || themeColors["background"] || fallbackPalette.window
     readonly property color accentColor:
@@ -46,7 +43,7 @@ Item {
         }
 
         const parsed = {}
-        const lines = content.split(/\\r?\\n/)
+        const lines = content.split(/\r?\n/)
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim()
             if (!line || line.startsWith("#"))
@@ -77,7 +74,6 @@ Item {
         onLoadFailed: error => console.warn("Could not load Omarchy colors.toml:", error)
     }
 
-    // The file watcher handles theme switches; this also recovers from missed events.
     Timer {
         interval: 5000
         running: true

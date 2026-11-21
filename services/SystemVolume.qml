@@ -2,7 +2,6 @@ import QtQuick
 import Quickshell.Io
 
 // Controls the default PipeWire playback sink with wpctl.
-// Quickshell.Io.Process is started by setting running=true; it has no exec() method.
 Item {
     id: root
 
@@ -22,7 +21,7 @@ Item {
     }
 
     function adjustVolume(direction) {
-        if (!available || direction === 0)
+        if (direction === 0)
             return
 
         pendingSteps = Math.max(-20, Math.min(20,
@@ -37,7 +36,6 @@ Item {
         const step = pendingSteps > 0 ? "5%+" : "5%-"
         pendingSteps += pendingSteps > 0 ? -1 : 1
 
-        // Each Process argument is passed separately; no shell is involved.
         volumeCommand.command = [
             "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", step,
             "--limit", "1.0"
@@ -46,7 +44,7 @@ Item {
     }
 
     function updateFromOutput(output) {
-        const match = output.match(/Volume:\\s*([0-9]+(?:\\.[0-9]+)?)/)
+        const match = output.match(/Volume:\s*([0-9]+(?:\.[0-9]+)?)/)
         if (!match) {
             available = false
             return
@@ -85,7 +83,6 @@ Item {
         }
     }
 
-    // Reflect changes made by keyboard shortcuts, the system OSD or another mixer.
     Timer {
         interval: 1000
         running: true
