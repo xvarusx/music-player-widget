@@ -46,6 +46,7 @@ Item {
     readonly property bool canGoNext: player ? player.canGoNext : false
     readonly property bool canGoPrevious: player ? player.canGoPrevious : false
     readonly property bool canSeek: player ? player.canSeek : false
+    readonly property real volume: player ? player.volume : 1.0
 
     // Seek offsets are expressed in seconds by Quickshell's MprisPlayer API.
     property real seekStep: 10
@@ -91,6 +92,20 @@ Item {
             player.seek(seekStep)
         else
             console.warn("MPRIS: seeking is not supported by the selected player")
+    }
+
+    function setVolume(vol) {
+        if (!player) {
+            console.warn("MPRIS: no player is available")
+            return
+        }
+        if (typeof player.setVolume === 'function') {
+            player.setVolume(vol)
+        } else {
+            // Try to set volume directly on player object
+            player.volume = vol
+            console.log("MPRIS: volume set to", vol)
+        }
     }
 
     onPlayerChanged: {

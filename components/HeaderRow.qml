@@ -1,7 +1,9 @@
 import QtQuick
+import Quickshell.Services.Mpris
 
 Item {
     id: root
+
     property var theme: null
     property var media: null
 
@@ -14,6 +16,7 @@ Item {
 
     Row {
         anchors.fill: parent
+        spacing: 12
 
         // Source Selector Pill
         Rectangle {
@@ -32,32 +35,29 @@ Item {
                     height: 6
                     radius: 3
                     color: root.textColor
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 Text {
-                    text: root.media && root.media.identity ? root.media.identity : "Spotify"
+                    text: root.media.playerIdentity ? root.media.playerIdentity : "Spotify"
                     color: root.textColor
                     font.family: "Inter"
                     font.pixelSize: 13
                     font.weight: Font.Medium
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
-                Text {
-                    text: "↕"
-                    color: root.dimColor
-                    font.pixelSize: 12
-                }
             }
         }
 
         Item {
-            width: 20
+            width: parent.width - sourceRow.width - 24 - 140 - 32 - 24
             height: 1
         }
 
         // Volume Pill
         Rectangle {
-            width: 120
+            width: 160
             height: 32
             color: root.pillBg
             radius: 16
@@ -66,37 +66,39 @@ Item {
                 anchors.fill: parent
                 anchors.leftMargin: 12
                 anchors.rightMargin: 12
+                spacing: parent.width - 64 
 
                 Text {
-                    text: "🔊"
+                    text: "🎧"
                     font.pixelSize: 13
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
-                Item { width: 40; height: 1 }
-
                 Text {
-                    text: "100%"
+                    text: media ? Math.round(media.volume * 100) + "%" : "100%"
                     color: root.textColor
                     font.family: "Inter"
                     font.pixelSize: 12
                     font.weight: Font.Bold
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onWheel: wheel => {
+                    if (root.media) {
+                        let vol = root.media.volume
+                        if (wheel.angleDelta.y > 0)
+                            vol = Math.min(1.0, vol + 0.05)
+                        else
+                            vol = Math.max(0.0, vol - 0.05)
+                        root.media.setVolume(vol)
+                    }
                 }
             }
         }
 
         // App Button
-        Rectangle {
-            width: 32
-            height: 32
-            color: root.pillBg
-            radius: 16
-
-            Text {
-                text: "≡"
-                color: root.textColor
-                font.pixelSize: 14
-                anchors.centerIn: parent
-            }
-        }
     }
 }

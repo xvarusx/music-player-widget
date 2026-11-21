@@ -6,3 +6,4 @@ Pre-flight: no shared interfaces.
 - [x] Task 3: Update Track Info and Album Art (in_progress)
 - [x] Task 4: Redesign Progress and Controls (in_progress)
 - [x] Task 5: Implement Wave Spectrum Visualizer (in_progress)
+All tasks: complete (commits 3db4883..94b0200, tests: N/A)

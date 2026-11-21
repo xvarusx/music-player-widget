@@ -8,6 +8,8 @@ Item {
     property color primaryText: "#c0caf5"
     property color secondaryText: "#a9b1d6"
 
+    readonly property bool isPlaying: media ? media.isPlaying : false
+
     Row {
         anchors.centerIn: parent
         spacing: 48
@@ -16,17 +18,24 @@ Item {
         Item {
             width: 32
             height: 32
+            anchors.verticalCenter: parent.verticalCenter
             
             Text {
-                text: "⏮"
-                color: "#8B97A6"
+                text: "◀◀"
+                color: root.accentColor
                 font.pixelSize: 22
                 anchors.centerIn: parent
             }
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: root.media.seekBackward()
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    if (root.media && root.media.canGoPrevious)
+                        root.media.player.previous()
+                    else
+                        root.media.seekBackward()
+                }
             }
         }
 
@@ -36,10 +45,13 @@ Item {
             height: 56
             radius: 28
             color: root.accentColor
+            anchors.verticalCenter: parent.verticalCenter
             
+            // Pause Icon (two bars)
             Row {
                 anchors.centerIn: parent
                 spacing: 5
+                visible: root.isPlaying
                 
                 Rectangle {
                     width: 4.5
@@ -55,9 +67,23 @@ Item {
                 }
             }
 
+            // Play Icon (triangle)
+            Text {
+                text: "▶"
+                color: "#14191F"
+                font.pixelSize: 20
+                anchors.centerIn: parent
+                visible: !root.isPlaying
+                leftPadding: 2
+            }
+
             MouseArea {
                 anchors.fill: parent
-                onClicked: root.media.togglePlayback()
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    if (root.media)
+                        root.media.togglePlayback()
+                }
             }
         }
 
@@ -65,17 +91,24 @@ Item {
         Item {
             width: 32
             height: 32
+            anchors.verticalCenter: parent.verticalCenter
             
             Text {
-                text: "⏭"
-                color: "#8B97A6"
+                text: "▶▶"
+                color: root.accentColor
                 font.pixelSize: 22
                 anchors.centerIn: parent
             }
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: root.media.seekForward()
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    if (root.media && root.media.canGoNext)
+                        root.media.player.next()
+                    else
+                        root.media.seekForward()
+                }
             }
         }
     }

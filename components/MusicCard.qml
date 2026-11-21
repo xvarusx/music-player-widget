@@ -80,7 +80,7 @@ Item {
             Equalizer {
                 width: parent.width
                 height: 28
-                playing: root.media ? root.media.isPlaying : true
+                playing: root.media ? root.media.isPlaying : false
                 accentColor: root.accentColor
                 secondaryAccent: root.secondaryAccent
             }
