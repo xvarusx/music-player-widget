@@ -15,24 +15,21 @@ Column {
     readonly property bool seekEnabled:
         media !== null && media.canSeek && duration > 0
 
-    spacing: 7
+    spacing: 6
 
     Rectangle {
         id: track
         width: root.width
-        height: 7
-        radius: 5
-        color: root.trackColor
+        height: 4
+        radius: 2
+        color: "#2F343E"
         clip: true
 
         Rectangle {
             width: parent.width * root.progress
             height: parent.height
-            radius: 5
-            color: root.accentColor
-            Behavior on width {
-                NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
-            }
+            radius: 2
+            color: "#6E879C"
         }
 
         MouseArea {
@@ -49,24 +46,24 @@ Column {
         }
     }
 
-    Row {
+    Item {
         width: root.width
+        height: 16
 
         Text {
-            text: formatTime(root.position)
-            color: root.secondaryText
-            font.pixelSize: 10
-        }
-
-        Item {
-            width: Math.max(0, root.width - 90)
-            height: 1
+            anchors.left: parent.left
+            text: formatTime(root.position / 1000)
+            color: "#5F6B7A"
+            font.family: "Roboto Mono"
+            font.pixelSize: 12
         }
 
         Text {
-            text: formatTime(root.duration)
-            color: root.secondaryText
-            font.pixelSize: 10
+            anchors.right: parent.right
+            text: formatTime(root.duration / 1000)
+            color: "#5F6B7A"
+            font.family: "Roboto Mono"
+            font.pixelSize: 12
         }
     }
 

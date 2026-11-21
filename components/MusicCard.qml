@@ -4,7 +4,6 @@ Item {
     id: root
     property var theme: null
     property var media: null
-    property date currentTime: new Date()
 
     readonly property color cardColor: theme ? theme.cardColor : "#24283b"
     readonly property color accentColor: theme ? theme.accentColor : "#7aa2f7"
@@ -13,76 +12,56 @@ Item {
     readonly property color borderColor: theme ? theme.borderColor : "#414868"
     readonly property color secondaryAccent: theme ? theme.secondaryAccent : "#ad8ee6"
 
+    width: 380
+
     Rectangle {
         anchors.fill: parent
-        radius: 20
+        radius: 26
         color: root.cardColor
         border.width: 1
         border.color: root.borderColor
 
         Column {
             anchors.fill: parent
-            anchors.margins: 20
-            spacing: 13
+            anchors.leftMargin: 24
+            anchors.rightMargin: 24
+            anchors.topMargin: 22
+            anchors.bottomMargin: 18
+            spacing: 20
 
-            Column {
-                spacing: 3
-                Text {
-                    text: Qt.formatTime(root.currentTime, "h:mm AP")
-                    color: root.primaryText
-                    font.pixelSize: 34
-                    font.weight: Font.Bold
-                }
-                Text {
-                    text: Qt.formatDate(root.currentTime, "dddd, MMMM d")
-                    color: root.secondaryText
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
+            HeaderRow {
                 width: parent.width
-                height: 1
-                color: root.borderColor
-                opacity: 0.7
+                theme: root.theme
+                media: root.media
             }
 
             Row {
                 width: parent.width
-                spacing: 12
+                spacing: 18
 
                 AlbumArtwork {
-                    width: 76
-                    height: 76
+                    width: 98
+                    height: 98
                     source: root.media ? root.media.artworkUrl : ""
                     accentColor: root.accentColor
                     borderColor: root.borderColor
                 }
 
                 TrackInfo {
-                    width: Math.max(80, parent.width - 76 - 12 - 82)
+                    width: parent.width - 98 - 18
                     anchors.verticalCenter: parent.verticalCenter
-                    title: root.media ? root.media.title : "Nothing playing"
-                    artist: root.media ? root.media.artist : "Start playing music"
-                    album: root.media ? root.media.album : ""
+                    title: root.media ? root.media.title : "INSANITY"
+                    artist: root.media ? root.media.artist : "WIL$ON"
+                    album: root.media ? root.media.album : "Method Acting : act I"
                     primaryText: root.primaryText
                     secondaryText: root.secondaryText
-                }
-
-                Equalizer {
-                    width: 82
-                    height: 42
-                    anchors.verticalCenter: parent.verticalCenter
-                    playing: root.media ? root.media.isPlaying : false
-                    accentColor: root.accentColor
-                    secondaryAccent: root.secondaryAccent
                 }
             }
 
             ProgressBar {
                 width: parent.width
-                position: root.media ? root.media.position : 0
-                duration: root.media ? root.media.length : 0
+                position: root.media ? root.media.position : 17000
+                duration: root.media ? root.media.length : 125000
                 media: root.media
                 accentColor: root.accentColor
                 trackColor: root.borderColor
@@ -91,11 +70,35 @@ Item {
 
             PlaybackControls {
                 width: parent.width
-                height: 42
+                height: 56
                 media: root.media
                 accentColor: root.accentColor
                 primaryText: root.primaryText
                 secondaryText: root.secondaryText
+            }
+
+            Equalizer {
+                width: parent.width
+                height: 28
+                playing: root.media ? root.media.isPlaying : true
+                accentColor: root.accentColor
+                secondaryAccent: root.secondaryAccent
+            }
+
+            Item {
+                width: parent.width
+                height: 3
+                Row {
+                    anchors.centerIn: parent
+                    width: 36
+                    height: 3
+                    Rectangle {
+                        width: 36
+                        height: 3
+                        radius: 1.5
+                        color: root.borderColor
+                    }
+                }
             }
         }
     }

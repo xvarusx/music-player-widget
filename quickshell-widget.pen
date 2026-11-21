@@ -1,0 +1,962 @@
+{
+  "version": "2.25",
+  "children": [
+    {
+      "type": "frame",
+      "id": "a6JrvO",
+      "x": 430,
+      "y": 0,
+      "name": "Spotify Quickshell Widget",
+      "clip": true,
+      "width": 380,
+      "fill": {
+        "type": "gradient",
+        "gradientType": "linear",
+        "enabled": true,
+        "rotation": 180,
+        "size": {
+          "height": 1
+        },
+        "colors": [
+          {
+            "color": "#23262D",
+            "position": 0
+          },
+          {
+            "color": "#1D2024",
+            "position": 1
+          }
+        ]
+      },
+      "cornerRadius": 26,
+      "layout": "vertical",
+      "gap": 20,
+      "padding": [
+        22,
+        24,
+        18,
+        24
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "H8eJCo",
+          "name": "Header Row",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "H260ls",
+              "name": "Source Selector Pill",
+              "fill": "$pill-bg",
+              "cornerRadius": 16,
+              "gap": 7,
+              "padding": [
+                6,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "zFPgH",
+                  "name": "Status Indicator Dot",
+                  "fill": "#6D7A8A",
+                  "width": 6,
+                  "height": 6
+                },
+                {
+                  "type": "text",
+                  "id": "DTZlR",
+                  "name": "App Name",
+                  "fill": "$text-muted",
+                  "content": "Spotify",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "medium"
+                },
+                {
+                  "type": "icon",
+                  "id": "yw1ry",
+                  "name": "Selector Arrows",
+                  "width": 13,
+                  "height": 13,
+                  "icon": "chevrons-up-down",
+                  "library": "lucide",
+                  "fill": "$text-dim"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "KoufP",
+              "name": "Header Right Group",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "E939PK",
+                  "name": "Volume Pill",
+                  "width": 120,
+                  "fill": "$accent-steel",
+                  "cornerRadius": 16,
+                  "padding": [
+                    6,
+                    12
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "y1DN0K",
+                      "name": "Speaker Icon",
+                      "width": 15,
+                      "height": 15,
+                      "icon": "volume-2",
+                      "library": "lucide",
+                      "fill": "$icon-dark"
+                    },
+                    {
+                      "type": "text",
+                      "id": "MvAe2",
+                      "name": "Volume Percent",
+                      "fill": "$icon-dark",
+                      "content": "100%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "J1Gr7Y",
+                  "name": "Spotify App Button",
+                  "width": 32,
+                  "height": 32,
+                  "fill": "$pill-bg",
+                  "cornerRadius": 16,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "t96IP",
+                      "name": "Spotify Waves",
+                      "width": 18,
+                      "height": 18,
+                      "layout": "vertical",
+                      "gap": 2,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ysj3E",
+                          "name": "Wave Top",
+                          "width": 14,
+                          "height": 2.5,
+                          "fill": "$text-muted",
+                          "cornerRadius": 1.5
+                        },
+                        {
+                          "type": "frame",
+                          "id": "INSWe",
+                          "name": "Wave Middle",
+                          "width": 11,
+                          "height": 2.5,
+                          "fill": "$text-muted",
+                          "cornerRadius": 1.5
+                        },
+                        {
+                          "type": "frame",
+                          "id": "cBJ8g",
+                          "name": "Wave Bottom",
+                          "width": 8,
+                          "height": 2.5,
+                          "fill": "$text-muted",
+                          "cornerRadius": 1.5
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "sFZeS",
+          "name": "Track Info Row",
+          "width": "fill_container",
+          "gap": 18,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "c958Ka",
+              "name": "Album Cover Art",
+              "clip": true,
+              "width": 98,
+              "height": 98,
+              "fill": {
+                "type": "gradient",
+                "gradientType": "linear",
+                "enabled": true,
+                "rotation": 45,
+                "size": {
+                  "height": 1
+                },
+                "colors": [
+                  {
+                    "color": "#544E3D",
+                    "position": 0
+                  },
+                  {
+                    "color": "#3B372B",
+                    "position": 0.6
+                  },
+                  {
+                    "color": "#24221A",
+                    "position": 1
+                  }
+                ]
+              },
+              "cornerRadius": 14,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "EVOno",
+                  "name": "Calibration Squares",
+                  "gap": 2,
+                  "padding": [
+                    5,
+                    6
+                  ],
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "G8mueh",
+                      "name": "Patch 1",
+                      "fill": "#F0E4D0",
+                      "width": 5,
+                      "height": 4
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "U8e2o",
+                      "name": "Patch 2",
+                      "fill": "#364A5E",
+                      "width": 5,
+                      "height": 4
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "EmGlH",
+                      "name": "Patch 3",
+                      "fill": "#1F232B",
+                      "width": 5,
+                      "height": 4
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "o3Xl1",
+                  "name": "Figure Representation",
+                  "width": "fill_container",
+                  "height": 70,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "nBJ4R",
+                      "x": 24,
+                      "y": 6,
+                      "name": "White Helmet",
+                      "fill": "#E4E8EE",
+                      "width": 38,
+                      "height": 40,
+                      "stroke": "#2A2E36",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "YPex4",
+                      "x": 14,
+                      "y": 38,
+                      "name": "Suit Silhouette",
+                      "width": 58,
+                      "height": 32,
+                      "fill": "#72707B",
+                      "cornerRadius": [
+                        8,
+                        8,
+                        0,
+                        0
+                      ]
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 3,
+                      "id": "ftJZz",
+                      "x": 28,
+                      "y": 16,
+                      "name": "Helmet Dark Visor",
+                      "fill": "#151920",
+                      "width": 30,
+                      "height": 14
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "mqIii",
+                      "x": 20,
+                      "y": 44,
+                      "name": "Handheld Skull",
+                      "fill": "#D5D1C3",
+                      "width": 14,
+                      "height": 14
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SZls8",
+              "name": "Track Metadata Stack",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rSJoZ",
+                  "name": "Song Title",
+                  "fill": "#BCC8D8",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "INSANITY",
+                  "fontFamily": "Roboto Mono",
+                  "fontSize": 17,
+                  "fontWeight": "600",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "bRAG0",
+                  "name": "Artist Name",
+                  "fill": "#7E8D9E",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "WIL$ON",
+                  "fontFamily": "Roboto Mono",
+                  "fontSize": 13,
+                  "fontWeight": "medium",
+                  "letterSpacing": 0.5
+                },
+                {
+                  "type": "text",
+                  "id": "l1YHyk",
+                  "name": "Album Details",
+                  "fill": "#586574",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Method Acting : act I",
+                  "fontFamily": "Roboto Mono",
+                  "fontSize": 12,
+                  "fontWeight": "normal",
+                  "letterSpacing": 0.3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "erfzX",
+          "name": "Progress Section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 6,
+          "children": [
+            {
+              "type": "frame",
+              "id": "XFV1f",
+              "name": "Track Progress Bar",
+              "width": "fill_container",
+              "height": 4,
+              "fill": "$track-bg",
+              "cornerRadius": 2,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2,
+                  "id": "qtgDu",
+                  "name": "Progress Active Fill",
+                  "fill": "$accent-steel-light",
+                  "width": 48,
+                  "height": 4
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "evTi2",
+              "name": "Timestamps Row",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vEuyB",
+                  "name": "Elapsed Time",
+                  "fill": "$text-dim",
+                  "content": "0:17",
+                  "fontFamily": "Roboto Mono",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "c9y1g",
+                  "name": "Total Duration",
+                  "fill": "$text-dim",
+                  "content": "2:05",
+                  "fontFamily": "Roboto Mono",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lzfPA",
+          "name": "Playback Controls Row",
+          "width": "fill_container",
+          "gap": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "zLT8n",
+              "name": "Previous Track Button",
+              "width": 32,
+              "height": 32,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "ZAvWt",
+                  "name": "Prev Icon",
+                  "width": 22,
+                  "height": 22,
+                  "icon": "skip-back",
+                  "library": "phosphor",
+                  "fill": "$text-muted"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "RvIxa",
+              "name": "Play Pause Button",
+              "width": 56,
+              "height": 56,
+              "fill": "$accent-steel",
+              "cornerRadius": 28,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sDBEO",
+                  "name": "Pause Icon Bars",
+                  "gap": 5,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 1,
+                      "id": "QA55N",
+                      "name": "Pause Bar Left",
+                      "fill": "$icon-dark",
+                      "width": 4.5,
+                      "height": 18
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 1,
+                      "id": "LA19G",
+                      "name": "Pause Bar Right",
+                      "fill": "$icon-dark",
+                      "width": 4.5,
+                      "height": 18
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GGMup",
+              "name": "Next Track Button",
+              "width": 32,
+              "height": 32,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "YIL6n",
+                  "name": "Next Icon",
+                  "width": 22,
+                  "height": 22,
+                  "icon": "skip-forward",
+                  "library": "phosphor",
+                  "fill": "$text-muted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TYXzk",
+          "name": "Visualizer Wave Spectrum",
+          "width": "fill_container",
+          "height": 28,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "ZvKOJ",
+              "name": "Wave Bar 1",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "C6zND8",
+              "name": "Wave Bar 2",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "WTHc7",
+              "name": "Wave Bar 3",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "qmiFF",
+              "name": "Wave Bar 4",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "wDZk0",
+              "name": "Wave Bar 5",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "NBVXD",
+              "name": "Wave Bar 6",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "OKdpI",
+              "name": "Wave Bar 7",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "XNB9B",
+              "name": "Wave Bar 8",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "w7cua1",
+              "name": "Wave Bar 9",
+              "width": 4,
+              "height": 8,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "pdEfZ",
+              "name": "Wave Bar 10",
+              "width": 4,
+              "height": 18,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "h13zpJ",
+              "name": "Wave Bar 11",
+              "width": 4,
+              "height": 24,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "W3O1C",
+              "name": "Wave Bar 12",
+              "width": 4,
+              "height": 24,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "KgUIn",
+              "name": "Wave Bar 13",
+              "width": 4,
+              "height": 8,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "lNkNn",
+              "name": "Wave Bar 14",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "g0u8q1",
+              "name": "Wave Bar 15",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "BknuX",
+              "name": "Wave Bar 16",
+              "width": 4,
+              "height": 6,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "F02Ja",
+              "name": "Wave Bar 17",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "PKq1x",
+              "name": "Wave Bar 18",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "V0Adb",
+              "name": "Wave Bar 19",
+              "width": 4,
+              "height": 8,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "HkQd8",
+              "name": "Wave Bar 20",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "RShQJ",
+              "name": "Wave Bar 21",
+              "width": 4,
+              "height": 12,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "fLoGV",
+              "name": "Wave Bar 22",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "CzUfw",
+              "name": "Wave Bar 23",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "Ggfs9",
+              "name": "Wave Bar 24",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "MDJrr",
+              "name": "Wave Bar 25",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "yYqGF",
+              "name": "Wave Bar 26",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "mxFlJ",
+              "name": "Wave Bar 27",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "Jjwds",
+              "name": "Wave Bar 28",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "i8d8yi",
+              "name": "Wave Bar 29",
+              "width": 4,
+              "height": 4,
+              "fill": "$text-dim",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "S89prn",
+              "name": "Wave Bar 30",
+              "width": 4,
+              "height": 18,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "g6R6P",
+              "name": "Wave Bar 31",
+              "width": 4,
+              "height": 22,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "YBmfR",
+              "name": "Wave Bar 32",
+              "width": 4,
+              "height": 16,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "O7Wi3y",
+              "name": "Wave Bar 33",
+              "width": 4,
+              "height": 12,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "C17UZZ",
+              "name": "Wave Bar 34",
+              "width": 4,
+              "height": 14,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "Dggld",
+              "name": "Wave Bar 35",
+              "width": 4,
+              "height": 16,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "JSVrL",
+              "name": "Wave Bar 36",
+              "width": 4,
+              "height": 20,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            },
+            {
+              "type": "frame",
+              "id": "rMKkD",
+              "name": "Wave Bar 37",
+              "width": 4,
+              "height": 22,
+              "fill": "$accent-steel-light",
+              "cornerRadius": 2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "zUvQv",
+          "name": "Drag Handle Container",
+          "width": "fill_container",
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 2,
+              "id": "O0PaX",
+              "name": "Drag Handle Pill",
+              "fill": "#2C313B",
+              "width": 36,
+              "height": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "bg-widget": {
+      "type": "color",
+      "value": "#1F2436"
+    },
+    "divider": {
+      "type": "color",
+      "value": "#2E354A"
+    },
+    "text-primary": {
+      "type": "color",
+      "value": "#DCE3FD"
+    },
+    "text-secondary": {
+      "type": "color",
+      "value": "#8D9BBE"
+    },
+    "accent-blue": {
+      "type": "color",
+      "value": "#7CA0FE"
+    },
+    "progress-track": {
+      "type": "color",
+      "value": "#353D58"
+    },
+    "widget-bg": {
+      "type": "color",
+      "value": "#1F2227"
+    },
+    "pill-bg": {
+      "type": "color",
+      "value": "#2A2E36"
+    },
+    "accent-steel": {
+      "type": "color",
+      "value": "#4B6172"
+    },
+    "accent-steel-light": {
+      "type": "color",
+      "value": "#6E879C"
+    },
+    "text-bright": {
+      "type": "color",
+      "value": "#C2CDDC"
+    },
+    "text-muted": {
+      "type": "color",
+      "value": "#8B97A6"
+    },
+    "text-dim": {
+      "type": "color",
+      "value": "#5F6B7A"
+    },
+    "track-bg": {
+      "type": "color",
+      "value": "#2F343E"
+    },
+    "icon-dark": {
+      "type": "color",
+      "value": "#14191F"
+    }
+  },
+  "fileToken": "c9e5e9f0-0995-44df-b40d-52cc3dd71049"
+}

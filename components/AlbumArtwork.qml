@@ -8,7 +8,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: 12
+        radius: 14
         color: root.borderColor
         opacity: 0.45
     }
@@ -28,17 +28,25 @@ Item {
         }
     }
 
-    Text {
-        anchors.centerIn: parent
-        text: "♫"
-        color: root.accentColor
-        font.pixelSize: Math.min(root.width, root.height) * 0.42
+    // Simplified fallback as per redesign
+    Item {
+        anchors.fill: parent
         visible: artwork.status !== Image.Ready
+        
+        Rectangle {
+            anchors.fill: parent
+            radius: 14
+            gradient: Gradient {
+                GradientStop { position: 0; color: "#544E3D" }
+                GradientStop { position: 0.6; color: "#3B372B" }
+                GradientStop { position: 1; color: "#24221A" }
+            }
+        }
     }
 
     Rectangle {
         anchors.fill: parent
-        radius: 12
+        radius: 14
         color: "transparent"
         border.width: 1
         border.color: root.borderColor

@@ -58,7 +58,6 @@ Scope {
             anchors.fill: parent
             theme: theme
             media: media
-            currentTime: root.currentTime
         }
     }
 }
