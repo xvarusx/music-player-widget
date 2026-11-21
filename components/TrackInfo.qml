@@ -5,8 +5,8 @@ Column {
     property string title: "Nothing playing"
     property string artist: "Start playing music"
     property string album: ""
-    property color primaryText: "#c0caf5"
-    property color secondaryText: "#a9b1d6"
+    property color primaryText: "transparent"
+    property color secondaryText: "transparent"
     spacing: 5
 
     Text {
@@ -30,7 +30,7 @@ Column {
     Text {
         width: root.width
         text: root.album
-        color: "#586574"
+        color: root.secondaryText
         font.family: "Roboto Mono"
         font.pixelSize: 12
         font.weight: Font.Normal

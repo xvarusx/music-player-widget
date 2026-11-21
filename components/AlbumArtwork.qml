@@ -4,8 +4,9 @@ import QtQuick.Effects
 Item {
     id: root
     property url source: ""
-    property color accentColor: "#7aa2f7"
-    property color borderColor: "#414868"
+    property color accentColor: "transparent"
+    property color borderColor: "transparent"
+    property color placeholderColor: "transparent"
 
     width: 98
     height: 98
@@ -18,7 +19,6 @@ Item {
     }
 
     Item {
-        id: clipArea
         anchors.fill: parent
 
         Image {
@@ -33,8 +33,6 @@ Item {
             mipmap: true
             opacity: status === Image.Ready ? 1 : 0
 
-            // A rounded Rectangle behind an Image does not clip its children.
-            // MultiEffect applies a true alpha-circle mask to the image itself.
             layer.enabled: true
             layer.effect: MultiEffect {
                 maskEnabled: true
@@ -70,9 +68,8 @@ Item {
             visible: artwork.status !== Image.Ready
             radius: Math.min(width, height) / 2
             gradient: Gradient {
-                GradientStop { position: 0; color: "#544E3D" }
-                GradientStop { position: 0.6; color: "#3B372B" }
-                GradientStop { position: 1; color: "#24221A" }
+                GradientStop { position: 0; color: root.placeholderColor }
+                GradientStop { position: 1; color: root.accentColor }
             }
         }
     }

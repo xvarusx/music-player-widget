@@ -64,9 +64,9 @@ The widget is created only once. If the configured monitor is disconnected, it f
 
 ## Features
 
-- Omarchy theme colors reload when the active theme changes.
+- Loads colors from Omarchy's active `~/.local/state/omarchy/current/theme/colors.toml` palette and reloads when the active theme changes.
 - MPRIS metadata, artwork, play/pause and 10-second seek controls.
-- Scroll up/down over the volume pill to adjust the default PipeWire output volume in 5% steps using `wpctl`.
+- Use the `−` and `+` controls or scroll over the volume pill to adjust the default PipeWire output volume in 5% steps using `wpctl`.
 - System volume is polled so changes made by keyboard shortcuts or another mixer are reflected in the widget.
 - Click the progress track to seek to the clicked position (when MPRIS seeking is supported).
 - Animated equalizer while playing.
