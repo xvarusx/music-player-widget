@@ -21,6 +21,7 @@ Item {
         anchors.fill: parent
         radius: 26
         color: root.cardColor
+        opacity: root.theme ? root.theme.cardOpacity : 1.0
         border.width: 1
         border.color: root.borderColor
 
