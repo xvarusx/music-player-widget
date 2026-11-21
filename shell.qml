@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Wayland
 import QtQuick
 import "components"
 import "services"
@@ -35,6 +36,9 @@ Scope {
         id: widgetWindow
 
         screen: settings.selectedScreen
+
+        // Keep the card above the wallpaper but below normal application windows.
+        WlrLayershell.layer: WlrLayer.Bottom
 
         anchors {
             top: settings.corner.indexOf("top-") === 0
