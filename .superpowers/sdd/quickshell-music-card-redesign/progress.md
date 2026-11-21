@@ -2,3 +2,4 @@
 Pre-flight: no shared interfaces.
 - [x] Task 1: Update Card Structure and Geometry (in_progress)
 - [x] Task 1: Updated MusicCard layout and removed clock
+- [x] Task 2: Implement New Header Row (in_progress)
