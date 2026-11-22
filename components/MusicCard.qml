@@ -19,7 +19,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: 26
+        radius: root.theme ? root.theme.cornerRadius : 26
         color: root.cardColor
         opacity: root.theme ? root.theme.cardOpacity : 1.0
         border.width: 1
