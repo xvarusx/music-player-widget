@@ -11,16 +11,28 @@ Item {
     readonly property string themePath: Quickshell.env("HOME")
         + "/.local/state/omarchy/current/theme/colors.toml"
 
-    property var themeColors: ({})
+    // Keep the same fallback palette as widget-launcher's read_palette().
+    // The live Omarchy file overrides these values when it is available.
+    property var themeColors: ({
+        background: "#171717",
+        dark_background: "#101010",
+        darker_background: "#090909",
+        lighter_background: "#262626",
+        foreground: "#f5f5f5",
+        dark_foreground: "#a3a3a3",
+        accent: "#89b4fa",
+        selection: "#343434",
+        muted: "#737373",
+        red: "#f38ba8",
+        green: "#a6e3a1",
+        blue: "#89b4fa"
+    })
     property string themeMode: themeColors["mode"] || "unknown"
 
-    // Read the same Hyprland decoration setting used by widget-launcher.
-    // The initial value preserves the existing appearance until the first
-    // successful query returns the active Omarchy/Hyprland value.
-    property int cornerRadius: 26
+    // Match the exact Hyprland option queried by widget-launcher.
+    property int cornerRadius: 0
 
-    // Desktop widgets are unfocused surfaces, so follow Hyprland's
-    // inactive window opacity setting from Omarchy's Window Opacity control.
+    // Preserve the existing inactive-opacity behavior.
     property real cardOpacity: 1.0
 
     function updateCornerRadius(output) {
@@ -29,8 +41,8 @@ Item {
             const rawValue = settings.int !== undefined
                 ? settings.int
                 : settings.float
-
             const value = Number(rawValue)
+
             if (Number.isFinite(value))
                 cornerRadius = Math.max(0, Math.min(64, Math.round(value)))
         } catch (error) {
@@ -52,22 +64,25 @@ Item {
         id: fallbackPalette
     }
 
+    // These roles intentionally follow widget-launcher's Omarchy palette:
+    // background for the surface, selection for subtle surfaces/borders,
+    // muted for secondary details, and accent for interactive emphasis.
     readonly property color cardColor:
-        themeColors["lighter_background"] || themeColors["background"] || fallbackPalette.window
+        themeColors["background"] || fallbackPalette.window
     readonly property color accentColor:
         themeColors["accent"] || themeColors["blue"] || fallbackPalette.highlight
     readonly property color primaryText:
         themeColors["foreground"] || fallbackPalette.windowText
     readonly property color secondaryText:
-        themeColors["dark_foreground"] || themeColors["muted"] || fallbackPalette.mid
+        themeColors["dark_foreground"] || fallbackPalette.mid
     readonly property color borderColor:
-        themeColors["muted"] || fallbackPalette.mid
+        themeColors["selection"] || fallbackPalette.mid
     readonly property color mutedColor:
         themeColors["muted"] || fallbackPalette.mid
     readonly property color secondaryAccent:
-        themeColors["magenta"] || themeColors["blue"] || fallbackPalette.highlight
+        themeColors["blue"] || themeColors["accent"] || fallbackPalette.highlight
     readonly property color trackColor:
-        themeColors["dark_background"] || themeColors["background"] || fallbackPalette.base
+        themeColors["dark_background"] || fallbackPalette.base
 
     function parseTheme() {
         const content = themeFile.text()
@@ -76,10 +91,26 @@ Item {
             return
         }
 
-        const parsed = {}
-        const lines = content.split(/\\r?\\n/)
+        // Start with the launcher's defaults so missing optional keys never
+        // leave the widget with unrelated Qt system colors.
+        const parsed = {
+            background: "#171717",
+            dark_background: "#101010",
+            darker_background: "#090909",
+            lighter_background: "#262626",
+            foreground: "#f5f5f5",
+            dark_foreground: "#a3a3a3",
+            accent: "#89b4fa",
+            selection: "#343434",
+            muted: "#737373",
+            red: "#f38ba8",
+            green: "#a6e3a1",
+            blue: "#89b4fa"
+        }
+
+        const lines = content.split(/\r?\n/)
         for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim()
+            let line = lines[i].trim()
             if (!line || line.startsWith("#"))
                 continue
 
@@ -89,13 +120,18 @@ Item {
 
             const key = line.slice(0, separator).trim()
             let value = line.slice(separator + 1).trim()
+            value = value.replace(/\s+#.*$/, "")
             value = value.replace(/^["']|["']$/g, "")
-            if (key && value)
+
+            // Match the flat color keys consumed by widget-launcher.
+            if (Object.prototype.hasOwnProperty.call(parsed, key)
+                    && /^#[0-9a-fA-F]{6,8}$/.test(value)) {
                 parsed[key] = value
+            }
         }
 
         themeColors = parsed
-        console.log("Loaded Omarchy palette:", themePath, "| mode:", themeMode)
+        console.log("Loaded Omarchy palette:", themePath)
     }
 
     FileView {
@@ -124,7 +160,7 @@ Item {
 
     Process {
         id: roundingQuery
-        command: ["hyprctl", "getoption", "decoration:rounding", "-j"]
+        command: ["hyprctl", "-j", "getoption", "decoration:rounding"]
 
         stdout: StdioCollector {
             onStreamFinished: root.updateCornerRadius(this.text)
@@ -137,7 +173,7 @@ Item {
     }
 
     Timer {
-        interval: 2000
+        interval: 3000
         running: true
         repeat: true
         onTriggered: {
