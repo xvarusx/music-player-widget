@@ -11,6 +11,11 @@ Item {
     property color trackColor: "transparent"
     readonly property color pillBg: theme ? theme.borderColor : "transparent"
 
+    // Pills follow the system corner radius instead of a hard-coded value.
+    readonly property real pillRadius: theme
+        ? Math.min(Math.max(0, Number(theme.cornerRadius)), root.height / 2)
+        : 16
+
     width: parent.width
     height: 32
 
@@ -22,7 +27,7 @@ Item {
             height: 32
             width: sourceRow.width + 24
             color: root.pillBg
-            radius: 16
+            radius: root.pillRadius
 
             Row {
                 id: sourceRow
@@ -51,7 +56,7 @@ Item {
             width: 177
             height: 32
             color: root.pillBg
-            radius: 16
+            radius: root.pillRadius
 
             MouseArea {
                 anchors.fill: parent

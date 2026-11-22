@@ -32,8 +32,34 @@ Item {
     // Match the exact Hyprland option queried by widget-launcher.
     property int cornerRadius: 0
 
-    // Preserve the existing inactive-opacity behavior.
-    property real cardOpacity: 1.0
+    // Surface style. "auto" follows Omarchy; "opaque", "transparent" or
+    // "glassy" force a mode. surfaceOpacity >= 0 forces the alpha.
+    property string surfaceOverride: "auto"
+    property real opacityOverride: -1
+
+    // What Omarchy/Hyprland currently does to windows (scripts/omarchy-surface.sh).
+    property real detectedOpacity: 1.0
+    property bool detectedBlur: false
+
+    readonly property string surfaceMode: {
+        if (surfaceOverride === "opaque" || surfaceOverride === "transparent"
+                || surfaceOverride === "glassy")
+            return surfaceOverride
+        if (detectedOpacity >= 0.999)
+            return "opaque"
+        return detectedBlur ? "glassy" : "transparent"
+    }
+
+    // Alpha applied to the card surface only.
+    readonly property real cardOpacity: {
+        if (opacityOverride >= 0)
+            return Math.min(1.0, opacityOverride)
+        if (surfaceMode === "opaque")
+            return 1.0
+        if (surfaceMode === "glassy")
+            return detectedOpacity < 0.999 ? Math.min(detectedOpacity, 0.8) : 0.6
+        return detectedOpacity < 0.999 ? detectedOpacity : 0.85
+    }
 
     function updateCornerRadius(output) {
         try {
@@ -50,14 +76,15 @@ Item {
         }
     }
 
-    function updateCardOpacity(output) {
-        try {
-            const settings = JSON.parse(output)
-            if (settings && Number.isFinite(settings.float))
-                cardOpacity = Math.max(0.0, Math.min(1.0, settings.float))
-        } catch (error) {
-            console.warn("Could not parse Hyprland inactive opacity:", error)
-        }
+    function updateSurface(output) {
+        const parts = output.trim().split(/\s+/)
+        if (parts.length < 2)
+            return
+        const o = Number(parts[0])
+        if (Number.isFinite(o))
+            detectedOpacity = Math.max(0.0, Math.min(1.0, o))
+        const b = Number(parts[1])
+        detectedBlur = Number.isFinite(b) && b > 0
     }
 
     SystemPalette {
@@ -146,15 +173,15 @@ Item {
 
     Process {
         id: opacityQuery
-        command: ["hyprctl", "getoption", "decoration:inactive_opacity", "-j"]
+        command: ["sh", Quickshell.shellDir + "/scripts/omarchy-surface.sh"]
 
         stdout: StdioCollector {
-            onStreamFinished: root.updateCardOpacity(this.text)
+            onStreamFinished: root.updateSurface(this.text)
         }
 
         onExited: (exitCode, exitStatus) => {
             if (exitCode !== 0)
-                console.warn("Could not read Hyprland inactive window opacity; keeping current card opacity")
+                console.warn("Could not read Omarchy window opacity; keeping current surface")
         }
     }
 
@@ -179,14 +206,14 @@ Item {
         onTriggered: {
             themeFile.reload()
             if (!opacityQuery.running)
-                opacityQuery.exec()
+                opacityQuery.exec(["sh", Quickshell.shellDir + "/scripts/omarchy-surface.sh"])
             if (!roundingQuery.running)
-                roundingQuery.exec()
+                roundingQuery.exec(["hyprctl", "-j", "getoption", "decoration:rounding"])
         }
     }
 
     Component.onCompleted: {
-        opacityQuery.exec()
-        roundingQuery.exec()
+        opacityQuery.exec(["sh", Quickshell.shellDir + "/scripts/omarchy-surface.sh"])
+        roundingQuery.exec(["hyprctl", "-j", "getoption", "decoration:rounding"])
     }
 }

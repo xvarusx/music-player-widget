@@ -9,6 +9,8 @@ Scope {
 
     ThemeService {
         id: theme
+        surfaceOverride: settings.surface
+        opacityOverride: settings.surfaceOpacity
     }
 
     MprisService {
@@ -36,6 +38,9 @@ Scope {
         id: widgetWindow
 
         screen: settings.selectedScreen
+
+        // Namespace lets Hyprland blur this surface in "glassy" mode.
+        WlrLayershell.namespace: "music-card"
 
         // Keep the card above the wallpaper but below normal application windows.
         WlrLayershell.layer: WlrLayer.Bottom

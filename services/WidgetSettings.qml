@@ -41,6 +41,10 @@ Item {
             property int offsetY: 75
             property int width: 360
             property int height: 350
+            // "auto" follows Omarchy; or "opaque" | "transparent" | "glassy".
+            property string surface: "auto"
+            // -1 = automatic; 0.0-1.0 forces the card alpha.
+            property real surfaceOpacity: -1
         }
 
         onAdapterUpdated: writeAdapter()
@@ -66,4 +70,6 @@ Item {
     readonly property int offsetY: settingsData.offsetY
     readonly property int widgetWidth: settingsData.width
     readonly property int widgetHeight: settingsData.height
+    readonly property string surface: settingsData.surface
+    readonly property real surfaceOpacity: settingsData.surfaceOpacity
 }

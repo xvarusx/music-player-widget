@@ -59,6 +59,28 @@ Example:
 - `corner`: `top-left`, `top-right`, `bottom-left`, or `bottom-right`.
 - `offsetX` and `offsetY`: distance from the selected corner in logical pixels.
 - `width` and `height`: widget dimensions in logical pixels.
+- `surface`: `auto` (default, follows Omarchy), `opaque`, `transparent` or `glassy`.
+- `surfaceOpacity`: `-1` for automatic, or `0.0`-`1.0` to force the card alpha.
+
+### Opacity, glass and corner radius
+
+The card radius comes from Hyprland's `decoration:rounding`, and the surface
+follows Omarchy's window transparency (`scripts/omarchy-surface.sh`):
+opaque when transparency is off, transparent when it is on, and glassy when
+transparency is on and Hyprland blur is enabled. Run
+`sh scripts/omarchy-surface.sh` to see what the widget detects (`<opacity> <blur>`).
+
+For the blur behind the card in glassy mode, add to your Hyprland config
+(the widget's layer namespace is `music-card`):
+
+```
+# Hyprland < 0.53
+layerrule = blur, music-card
+layerrule = ignorealpha 0.2, music-card
+# Hyprland >= 0.53
+layerrule = blur on, match:namespace music-card
+layerrule = ignore_alpha 0.2, match:namespace music-card
+```
 
 The widget is created only once. If the configured monitor is disconnected, it falls back to the first connected monitor; when the configured monitor returns, it is selected again. Available monitor names are printed in the Quickshell logs.
 

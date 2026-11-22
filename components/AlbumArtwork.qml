@@ -11,9 +11,15 @@ Item {
     width: 98
     height: 98
 
+    // The artwork frame follows the system corner radius, falling back to a
+    // circle when no theme is injected.
+    readonly property real artRadius: root.theme
+        ? Math.max(0, Number(root.theme.cornerRadius))
+        : Math.min(width, height) / 2
+
     Rectangle {
         anchors.fill: parent
-        radius: Math.min(width, height) / 2
+        radius: root.artRadius
         color: root.borderColor
         opacity: 0.45
     }
@@ -52,7 +58,7 @@ Item {
         Rectangle {
             id: circleMask
             anchors.fill: artwork
-            radius: Math.min(width, height) / 2
+            radius: root.artRadius
             color: "white"
         }
 
@@ -66,7 +72,7 @@ Item {
             anchors.fill: parent
             anchors.margins: 1
             visible: artwork.status !== Image.Ready
-            radius: Math.min(width, height) / 2
+            radius: root.artRadius
             gradient: Gradient {
                 GradientStop { position: 0; color: root.placeholderColor }
                 GradientStop { position: 1; color: root.accentColor }
