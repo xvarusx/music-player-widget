@@ -50,7 +50,7 @@
               "type": "frame",
               "id": "H260ls",
               "name": "Source Selector Pill",
-              "width": 97,
+              "width": 95,
               "fill": "$pill-bg",
               "cornerRadius": 16,
               "gap": 7,
@@ -60,14 +60,6 @@
               ],
               "alignItems": "center",
               "children": [
-                {
-                  "type": "ellipse",
-                  "id": "zFPgH",
-                  "name": "Status Indicator Dot",
-                  "fill": "#6D7A8A",
-                  "width": 6,
-                  "height": 6
-                },
                 {
                   "type": "text",
                   "id": "DTZlR",
