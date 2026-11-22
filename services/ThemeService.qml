@@ -14,9 +14,29 @@ Item {
     property var themeColors: ({})
     property string themeMode: themeColors["mode"] || "unknown"
 
+    // Read the same Hyprland decoration setting used by widget-launcher.
+    // The initial value preserves the existing appearance until the first
+    // successful query returns the active Omarchy/Hyprland value.
+    property int cornerRadius: 26
+
     // Desktop widgets are unfocused surfaces, so follow Hyprland's
     // inactive window opacity setting from Omarchy's Window Opacity control.
     property real cardOpacity: 1.0
+
+    function updateCornerRadius(output) {
+        try {
+            const settings = JSON.parse(output)
+            const rawValue = settings.int !== undefined
+                ? settings.int
+                : settings.float
+
+            const value = Number(rawValue)
+            if (Number.isFinite(value))
+                cornerRadius = Math.max(0, Math.min(64, Math.round(value)))
+        } catch (error) {
+            console.warn("Could not parse Hyprland decoration rounding:", error)
+        }
+    }
 
     function updateCardOpacity(output) {
         try {
@@ -57,7 +77,7 @@ Item {
         }
 
         const parsed = {}
-        const lines = content.split(/\r?\n/)
+        const lines = content.split(/\\r?\\n/)
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim()
             if (!line || line.startsWith("#"))
@@ -102,6 +122,20 @@ Item {
         }
     }
 
+    Process {
+        id: roundingQuery
+        command: ["hyprctl", "-j", "getoption", "decoration:rounding"]
+
+        stdout: StdioCollector {
+            onStreamFinished: root.updateCornerRadius(this.text)
+        }
+
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0)
+                console.warn("Could not read Hyprland decoration rounding; keeping current corner radius")
+        }
+    }
+
     Timer {
         interval: 2000
         running: true
@@ -110,8 +144,13 @@ Item {
             themeFile.reload()
             if (!opacityQuery.running)
                 opacityQuery.exec()
+            if (!roundingQuery.running)
+                roundingQuery.exec()
         }
     }
 
-    Component.onCompleted: opacityQuery.exec()
+    Component.onCompleted: {
+        opacityQuery.exec()
+        roundingQuery.exec()
+    }
 }
