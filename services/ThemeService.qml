@@ -124,7 +124,7 @@ Item {
 
     Process {
         id: roundingQuery
-        command: ["hyprctl", "-j", "getoption", "decoration:rounding"]
+        command: ["hyprctl", "getoption", "decoration:rounding", "-j"]
 
         stdout: StdioCollector {
             onStreamFinished: root.updateCornerRadius(this.text)
