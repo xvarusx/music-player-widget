@@ -20,8 +20,12 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: root.theme ? root.theme.cornerRadius : 26
-        color: root.cardColor
-        opacity: root.theme ? root.theme.cardOpacity : 1.0
+        // Apply transparency to the card surface only. Rectangle.opacity
+        // would also fade every child control, label, and album-art item.
+        color: root.theme
+            ? Qt.rgba(root.cardColor.r, root.cardColor.g, root.cardColor.b,
+                      root.theme.cardOpacity)
+            : root.cardColor
         border.width: 1
         border.color: root.borderColor
 
